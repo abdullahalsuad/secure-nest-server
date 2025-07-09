@@ -20,3 +20,33 @@ export const addUser = async (req, res) => {
     res.status(400).json({ messages: err.message });
   }
 };
+
+export const updateProfile = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const { userName, userProfile } = req.body;
+
+    // Build update object with only allowed fields
+    const updateFields = {};
+    if (userName) updateFields.userName = userName;
+    if (userProfile) updateFields.userProfile = userProfile;
+
+    // Find and update user
+    const updatedUser = await UserModel.findOneAndUpdate(
+      { userId },
+      { $set: updateFields },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({
+      message: "User profile updated successfully",
+      user: updatedUser,
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
