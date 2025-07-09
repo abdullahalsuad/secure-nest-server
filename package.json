@@ -1,5 +1,5 @@
 {
-  "name": "backend-boilerplate",
+  "name": "secure-nest-server",
   "type": "module",
   "main": "src/server.js",
   "scripts": {
