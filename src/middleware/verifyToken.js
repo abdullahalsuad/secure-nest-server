@@ -1,19 +1,15 @@
-import admin from "../config/firebase.js";
+import jwt from "jsonwebtoken";
 
-export const verifyFirebaseToken = async (req, res, next) => {
-  const authHeader = req?.headers?.authorization;
+export const verifyToken = (req, res, next) => {
+  const token = req?.cookies?.token;
+  console.log(token);
 
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res.status(401).json({ message: "Unauthorized: No token provided" });
-  }
+  if (!token) return res.status(401).json({ message: "Unauthorized access" });
 
-  const token = authHeader.split(" ")[1];
+  jwt.verify(token, process.env.JWT_ACCESS_SECRET, (err, decoded) => {
+    if (err) return res.status(403).json({ message: "Forbidden access" });
 
-  try {
-    const decodedToken = await admin.auth().verifyIdToken(token);
-    req.user = decodedToken;
+    req.decoded = decoded;
     next();
-  } catch (error) {
-    return res.status(401).json({ message: "Unauthorized: Invalid token" });
-  }
+  });
 };

@@ -1,5 +1,31 @@
 import UserModel from "../models/userModel.js";
+import { generateToken } from "../utils/generateToken.js";
 
+// create JWT cookie
+export const createJwtToken = (req, res) => {
+  const userInfo = req.body;
+
+  const token = generateToken(userInfo);
+
+  res.cookie("token", token, {
+    httpOnly: true,
+    secure: false, // Set to true in production
+  });
+
+  res.json({ success: true });
+};
+
+//  clearing JWT cookie
+export const logout = (req, res) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: false, // Set to true in production
+  });
+
+  res.json({ message: "Logged out successfully" });
+};
+
+// add new user
 export const addUser = async (req, res) => {
   try {
     const user = new UserModel(req.body);
@@ -21,6 +47,7 @@ export const addUser = async (req, res) => {
   }
 };
 
+// update profile
 export const updateProfile = async (req, res) => {
   try {
     const userId = req.params.userId;
@@ -47,6 +74,20 @@ export const updateProfile = async (req, res) => {
       user: updatedUser,
     });
   } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// get all user
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await UserModel.find();
+
+    res.status(200).json({
+      message: "Users fetched successfully",
+      users,
+    });
+  } catch (error) {
     res.status(500).json({ message: err.message });
   }
 };
