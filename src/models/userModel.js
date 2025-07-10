@@ -12,7 +12,6 @@ const userSchema = new mongoose.Schema(
     },
     userProfile: {
       type: String,
-      required: true,
     },
     // firebase id
     userId: {

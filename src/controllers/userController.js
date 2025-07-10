@@ -83,11 +83,20 @@ export const getAllUsers = async (req, res) => {
   try {
     const users = await UserModel.find();
 
-    res.status(200).json({
-      message: "Users fetched successfully",
-      users,
-    });
+    res.status(200).json(users);
   } catch (error) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// get user by id
+export const getUserById = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const user = await UserModel.findOne({ userId });
+
+    res.status(200).json(user);
+  } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
