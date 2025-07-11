@@ -21,11 +21,19 @@ router.patch(
   userController.updateProfile
 );
 
-// get all user
-router.get("/users", verifyToken, userController.getAllUsers);
-
-// get user by id
-//get  user by user id
+// check the user role
 router.get("/user/:userId", verifyToken, userController.getUserById);
+
+// for admin only
+// get all user
+router.get("/users", verifyToken, verifyAdmin, userController.getAllUsers);
+
+//
+router.patch(
+  "/role/:userId",
+  verifyToken,
+  verifyAdmin,
+  userController.userRoleChange
+);
 
 export default router;

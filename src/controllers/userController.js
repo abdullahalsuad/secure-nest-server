@@ -100,3 +100,32 @@ export const getUserById = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+//Promote and Demote    user
+export const userRoleChange = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { role } = req.body;
+
+    if (!["Admin", "Agent", "Customer"].includes(role)) {
+      return res.status(400).json({ message: "Invalid status value" });
+    }
+
+    const user = await UserModel.findOneAndUpdate(
+      { userId },
+      { userRole: role },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: "user  not found" });
+    }
+
+    res.json({
+      message: "Raider status updated successfully",
+      user,
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};

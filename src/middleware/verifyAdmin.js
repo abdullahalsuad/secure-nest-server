@@ -1,12 +1,22 @@
+import jwt from "jsonwebtoken";
 import UserModel from "../models/userModel.js";
 
 const verifyAdmin = async (req, res, next) => {
   try {
-    const email = req.user.email;
+    const token = req?.cookies?.token;
 
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
+    } catch (err) {
+      return res.status(401).json({ message: "Invalid or expired token" });
+    }
+
+    const { email } = decoded;
+
+    // const email = req.user.email;
     const user = await UserModel.findOne({ userEmail: email });
 
-    // todo : not proper way need to fix
     if (!user || user.userRole !== "Admin") {
       return res.status(403).json({ message: "forbidden access" });
     }
