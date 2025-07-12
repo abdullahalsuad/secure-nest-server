@@ -7,6 +7,7 @@ import connectDB from "./config/db.js";
 
 // routes
 import userRoutes from "./routes/userRoutes.js";
+import policeRoutes from "./routes/policeRoutes.js";
 
 dotenv.config();
 const app = express();
@@ -27,6 +28,9 @@ connectDB();
 
 // Routes for articles
 app.use("/api/v1", userRoutes);
+
+// Routes for polices
+app.use("/api/v1", policeRoutes);
 
 // Basic route
 app.get("/", (req, res) => {
