@@ -16,12 +16,29 @@ export const addPolice = async (req, res) => {
   }
 };
 
-// get all  new polices
+// get all polices
 export const getAllPolices = async (req, res) => {
   try {
     const polices = await PoliceModel.find();
 
     res.status(200).json(polices);
+  } catch (err) {
+    res.status(400).json({ messages: err.message });
+  }
+};
+
+// Get single police
+export const getAPolice = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const police = await PoliceModel.findById(id);
+
+    if (!police) {
+      return res.status(404).json({ message: "Police record not found" });
+    }
+
+    res.status(200).json(police);
   } catch (err) {
     res.status(400).json({ messages: err.message });
   }

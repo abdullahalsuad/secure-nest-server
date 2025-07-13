@@ -9,7 +9,10 @@ const router = express.Router();
 router.post("/add-police", verifyAdmin, policeController.addPolice);
 
 // get all polices
-router.get("/polices", verifyAdmin, policeController.getAllPolices);
+router.get("/polices", policeController.getAllPolices);
+
+// get all polices
+router.get("/polices/:id", policeController.getAPolice);
 
 // DELETE /policies/:id
 router.delete("/policies/:id", verifyAdmin, policeController.removePolices);
