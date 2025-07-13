@@ -3,8 +3,28 @@ import mongoose, { mongo } from "mongoose";
 const applicationSchema = new mongoose.Schema(
   {
     policeId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Police",
+      type: String,
+      required: true,
+        },
+      
+    policeName: {
+      type: String,
+      required: true,
+    },
+
+    Status: {
+      type: String,
+      enum: ["Pending", "Approved", "Rejected"],
+      default: "Pending",
+    },
+    // user info
+    userId: {
+      type: String,
+      required: true,
+    },
+
+    userEmail: {
+      type: String,
       required: true,
     },
 
@@ -77,3 +97,4 @@ const applicationSchema = new mongoose.Schema(
 );
 
 const ApplicationModel = mongoose.model("Application", applicationSchema);
+export default ApplicationModel;
