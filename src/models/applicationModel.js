@@ -5,8 +5,8 @@ const applicationSchema = new mongoose.Schema(
     policeId: {
       type: String,
       required: true,
-        },
-      
+    },
+
     policeName: {
       type: String,
       required: true,
@@ -17,6 +17,13 @@ const applicationSchema = new mongoose.Schema(
       enum: ["Pending", "Approved", "Rejected"],
       default: "Pending",
     },
+
+    paymentStatues: {
+      type: String,
+      default: "Due",
+    },
+
+    
     // user info
     userId: {
       type: String,

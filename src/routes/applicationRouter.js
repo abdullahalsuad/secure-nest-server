@@ -24,6 +24,12 @@ router.get(
   applicationController.getUserApplications
 );
 
-
+// update statues
+router.patch(
+  "/applications/:applicationId",
+  verifyToken,
+  verifyAdmin,
+  applicationController.changeStatues
+);
 
 export default router;
