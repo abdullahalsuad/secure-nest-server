@@ -17,11 +17,13 @@ router.get(
   applicationController.getAllApplication
 );
 
-// get all user
+// get all user application
 router.get(
   "/my-applications/:userId",
   verifyToken,
   applicationController.getUserApplications
 );
+
+
 
 export default router;
