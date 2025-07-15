@@ -23,7 +23,22 @@ const applicationSchema = new mongoose.Schema(
       default: "Due",
     },
 
-    
+    //agent assigned
+    assignedAgent: {
+      agentEmail: {
+        type: String,
+        default: "no-assigned",
+      },
+      agentName: {
+        type: String,
+        default: "no-assigned",
+      },
+      agentID: {
+        type: String,
+        default: "no-assigned",
+      },
+    },
+
     // user info
     userId: {
       type: String,

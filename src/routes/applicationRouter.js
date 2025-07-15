@@ -9,6 +9,14 @@ const router = express.Router();
 // create a application
 router.post("/application", verifyToken, applicationController.addApplication);
 
+// assign agent
+router.patch(
+  "/applications/assign-agent/:applicationId",
+  verifyToken,
+  verifyAdmin,
+  applicationController.assignAgent
+);
+
 // get all application
 router.get(
   "/applications",

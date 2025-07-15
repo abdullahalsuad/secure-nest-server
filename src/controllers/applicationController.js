@@ -1,4 +1,5 @@
 import ApplicationModel from "../models/applicationModel.js";
+import UserModel from "../models/userModel.js";
 
 // add new application
 export const addApplication = async (req, res) => {
@@ -60,5 +61,35 @@ export const changeStatues = async (req, res) => {
     res.status(200).json(applications);
   } catch (err) {
     res.status(400).json({ message: err.message });
+  }
+};
+
+// assigned agent
+export const assignAgent = async (req, res) => {
+  try {
+    const { applicationId } = req.params;
+    const { agentEmail, agentName, agentID } = req.body;
+
+    console.log(applicationId);
+
+    const updatedApp = await ApplicationModel.findOneAndUpdate(
+      { _id: applicationId },
+      {
+        $set: {
+          "assignedAgent.agentEmail": agentEmail,
+          "assignedAgent.agentName": agentName,
+          "assignedAgent.agentID": agentID,
+        },
+      },
+      { new: true }
+    );
+
+    if (!updatedApp) {
+      return res.status(404).json({ message: "Application not found" });
+    }
+
+    res.status(200).json(updatedApp);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 };

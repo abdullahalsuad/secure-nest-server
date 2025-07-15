@@ -25,6 +25,16 @@ export const logout = (req, res) => {
   res.json({ message: "Logged out successfully" });
 };
 
+// get all agents
+export const getAllAgents = async (req, res) => {
+  try {
+    const agents = await UserModel.find({ userRole: "Agent" });
+    res.status(200).json(agents);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 // add new user
 export const addUser = async (req, res) => {
   try {

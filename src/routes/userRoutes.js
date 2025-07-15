@@ -26,10 +26,14 @@ router.patch(
 router.get("/user/:userId", verifyToken, userController.getUserById);
 
 // for admin only
+
+// get all agents
+router.get("/agents", verifyToken, verifyAdmin, userController.getAllAgents);
+
 // get all user
 router.get("/users", verifyToken, verifyAdmin, userController.getAllUsers);
 
-//
+// role update
 router.patch(
   "/role/:userId",
   verifyToken,
