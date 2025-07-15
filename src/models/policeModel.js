@@ -56,6 +56,10 @@ const policeSchema = new mongoose.Schema(
       required: true,
     },
 
+    purchaseCount: {
+      type: Number,
+      default: 0,
+    },
     // user information
     userEmail: {
       type: String,

@@ -10,6 +10,7 @@ import userRoutes from "./routes/userRoutes.js";
 import policeRoutes from "./routes/policeRoutes.js";
 import applicationRouter from "./routes/applicationRouter.js";
 import blogRoutes from "./routes/blogRoutes.js";
+import newsletterRoutes from "./routes/newsletterRoutes.js";
 
 dotenv.config();
 const app = express();
@@ -39,6 +40,9 @@ app.use("/api/v1", applicationRouter);
 
 // Routes for blogs
 app.use("/api/v1", blogRoutes);
+
+// Routes for newsletter
+app.use("/api/v1", newsletterRoutes);
 
 // Basic route
 app.get("/", (req, res) => {
