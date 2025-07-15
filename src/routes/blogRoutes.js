@@ -21,4 +21,7 @@ router.patch("/blogs/:id", blogController.updateBlog);
 // Blogs for a specific user
 router.get("/my-blogs/:userId", blogController.getBlogsByUser);
 
+// Get latest  blogs
+router.get("/latest-blogs", blogController.getLatestBlogs);
+
 export default router;

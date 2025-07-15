@@ -1,5 +1,5 @@
 import ApplicationModel from "../models/applicationModel.js";
-import UserModel from "../models/userModel.js";
+import policeModel from "../models/policeModel.js";
 
 // add new application
 export const addApplication = async (req, res) => {
@@ -45,20 +45,27 @@ export const changeStatues = async (req, res) => {
   try {
     const applicationId = req.params.applicationId;
     const { Status } = req.body;
-    console.log(Status);
     console.log(applicationId);
 
     if (!["Pending", "Approved", "Rejected"].includes(Status)) {
       return res.status(400).json({ message: "Invalid status provided" });
     }
 
-    const applications = await ApplicationModel.findOneAndUpdate(
+    const application = await ApplicationModel.findOneAndUpdate(
       { _id: applicationId },
       { $set: { Status } },
       { new: true }
     );
 
-    res.status(200).json(applications);
+    // If status is Approved, increment
+    if (Status === "Approved") {
+      await policeModel.findByIdAndUpdate(
+        application.policeId, // assumes
+        { $inc: { purchaseCount: 1 } }
+      );
+    }
+
+    res.status(200).json(application);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
@@ -91,5 +98,36 @@ export const assignAgent = async (req, res) => {
     res.status(200).json(updatedApp);
   } catch (err) {
     res.status(500).json({ message: err.message });
+  }
+};
+
+// GET assigned applications
+export const getAssignedApplications = async (req, res) => {
+  try {
+    const agentID = req.params.userId;
+    console.log(agentID);
+
+    const applications = await ApplicationModel.find({
+      "assignedAgent.agentID": agentID,
+    });
+
+    res.status(200).json(applications);
+  } catch (err) {
+    console.error("Error fetching assigned applications:", err.message);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// GET single application by ID
+export const getSingleApplication = async (req, res) => {
+  try {
+    const applicationId = req.params.applicationId;
+    
+
+    const application = await ApplicationModel.findById(applicationId);
+
+    res.status(200).json(application);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
   }
 };

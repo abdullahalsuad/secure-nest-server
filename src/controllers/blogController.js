@@ -91,3 +91,13 @@ export const getBlogsByUser = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+// Get latest 4 blogs
+export const getLatestBlogs = async (req, res) => {
+  try {
+    const blogs = await BlogModel.find().sort({ createdAt: -1 }).limit(4);
+    res.status(200).json(blogs);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};

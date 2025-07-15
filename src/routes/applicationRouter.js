@@ -21,11 +21,10 @@ router.patch(
 router.get(
   "/applications",
   verifyToken,
-  verifyAdmin,
   applicationController.getAllApplication
 );
 
-// get all user application
+// get all user's application
 router.get(
   "/my-applications/:userId",
   verifyToken,
@@ -36,8 +35,20 @@ router.get(
 router.patch(
   "/applications/:applicationId",
   verifyToken,
-  verifyAdmin,
   applicationController.changeStatues
+);
+
+// Get all assigned applications  for agents
+router.get(
+  "/assigned-applications/:userId",
+  verifyToken,
+  applicationController.getAssignedApplications
+);
+
+// Get single application
+router.get(
+  "/single-application/:applicationId",
+  applicationController.getSingleApplication
 );
 
 export default router;
