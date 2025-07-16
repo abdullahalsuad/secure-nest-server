@@ -24,7 +24,7 @@ router.get(
   applicationController.getAllApplication
 );
 
-// get all user's application
+// get  user's application
 router.get(
   "/my-applications/:userId",
   verifyToken,
@@ -51,4 +51,10 @@ router.get(
   applicationController.getSingleApplication
 );
 
+// get all approved policies
+router.get(
+  "/approved-policies/:userId",
+  verifyToken,
+  applicationController.getApprovedPoliciesForUser
+);
 export default router;

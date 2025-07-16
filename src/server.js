@@ -11,6 +11,7 @@ import policeRoutes from "./routes/policeRoutes.js";
 import applicationRouter from "./routes/applicationRouter.js";
 import blogRoutes from "./routes/blogRoutes.js";
 import newsletterRoutes from "./routes/newsletterRoutes.js";
+import claimRoutes from "./routes/claimRoutes.js";
 
 dotenv.config();
 const app = express();
@@ -43,6 +44,9 @@ app.use("/api/v1", blogRoutes);
 
 // Routes for newsletter
 app.use("/api/v1", newsletterRoutes);
+
+// Routes for claims
+app.use("/api/v1", claimRoutes);
 
 // Basic route
 app.get("/", (req, res) => {

@@ -64,7 +64,6 @@ export const removePolices = async (req, res) => {
 // UPDATE a policy
 export const updatePolicy = async (req, res) => {
   const { id } = req.params;
-  console.log(id);
 
   const updatedData = req.body;
 

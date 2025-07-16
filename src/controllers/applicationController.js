@@ -45,7 +45,6 @@ export const changeStatues = async (req, res) => {
   try {
     const applicationId = req.params.applicationId;
     const { Status } = req.body;
-    console.log(applicationId);
 
     if (!["Pending", "Approved", "Rejected"].includes(Status)) {
       return res.status(400).json({ message: "Invalid status provided" });
@@ -77,7 +76,7 @@ export const assignAgent = async (req, res) => {
     const { applicationId } = req.params;
     const { agentEmail, agentName, agentID } = req.body;
 
-    console.log(applicationId);
+ 
 
     const updatedApp = await ApplicationModel.findOneAndUpdate(
       { _id: applicationId },
@@ -105,7 +104,7 @@ export const assignAgent = async (req, res) => {
 export const getAssignedApplications = async (req, res) => {
   try {
     const agentID = req.params.userId;
-    console.log(agentID);
+
 
     const applications = await ApplicationModel.find({
       "assignedAgent.agentID": agentID,
@@ -113,7 +112,6 @@ export const getAssignedApplications = async (req, res) => {
 
     res.status(200).json(applications);
   } catch (err) {
-    console.error("Error fetching assigned applications:", err.message);
     res.status(500).json({ message: "Server error" });
   }
 };
@@ -122,12 +120,49 @@ export const getAssignedApplications = async (req, res) => {
 export const getSingleApplication = async (req, res) => {
   try {
     const applicationId = req.params.applicationId;
-    
 
     const application = await ApplicationModel.findById(applicationId);
 
     res.status(200).json(application);
   } catch (err) {
     res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const getApprovedPoliciesForUser = async (req, res) => {
+  const userId = req.params.userId;
+
+  try {
+    const approvedApplications = await ApplicationModel.aggregate([
+      {
+        $match: {
+          userId: userId,
+          Status: "Approved",
+        },
+      },
+
+      // Convert policeId string to ObjectId
+      {
+        $addFields: {
+          policeIdObj: { $toObjectId: "$policeId" },
+        },
+      },
+
+      {
+        $lookup: {
+          from: "polices",
+          localField: "policeIdObj",
+          foreignField: "_id",
+          as: "policyDetails",
+        },
+      },
+      {
+        $unwind: "$policyDetails",
+      },
+    ]);
+
+    res.status(200).json(approvedApplications);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 };
