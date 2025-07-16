@@ -12,6 +12,7 @@ import applicationRouter from "./routes/applicationRouter.js";
 import blogRoutes from "./routes/blogRoutes.js";
 import newsletterRoutes from "./routes/newsletterRoutes.js";
 import claimRoutes from "./routes/claimRoutes.js";
+import reviewRoutes from "./routes/reviewRoutes.js";
 
 dotenv.config();
 const app = express();
@@ -47,6 +48,9 @@ app.use("/api/v1", newsletterRoutes);
 
 // Routes for claims
 app.use("/api/v1", claimRoutes);
+
+// review routes
+app.use("/api/v1", reviewRoutes);
 
 // Basic route
 app.get("/", (req, res) => {

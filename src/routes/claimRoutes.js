@@ -8,6 +8,9 @@ const router = express.Router();
 // Customer routes
 router.post("/claims", verifyToken, claimController.submitClaim);
 
+// for admin
+router.get("/claims", verifyToken, claimController.getAllClaimsForAdmin);
+
 // Agent routes
 router.get(
   "/claims/:assignedAgentId",

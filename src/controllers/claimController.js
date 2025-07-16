@@ -19,15 +19,25 @@ export const submitClaim = async (req, res) => {
   }
 };
 
-// Get all claims
+// agent
 export const getAllClaims = async (req, res) => {
   try {
     const assignedAgentId = req.params.assignedAgentId;
 
-
     const claims = await ClaimModel.find({ assignedAgentId }).sort({
       createdAt: -1,
     });
+
+    res.status(200).json(claims);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// Get all claims
+export const getAllClaimsForAdmin = async (req, res) => {
+  try {
+    const claims = await ClaimModel.find();
 
     res.status(200).json(claims);
   } catch (err) {

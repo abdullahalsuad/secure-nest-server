@@ -27,9 +27,10 @@ const claimSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+
     documentUrl: {
       type: String,
-      required: false,
+      required: true,
     },
     claimStatus: {
       type: String,
