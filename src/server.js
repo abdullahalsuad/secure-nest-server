@@ -21,7 +21,7 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(
   cors({
-    origin: ["https://secure-nest-client.vercel.app/"],
+    origin: ["http://localhost:5173", "https://secure-nest-client.vercel.app"],
     credentials: true,
   })
 );
