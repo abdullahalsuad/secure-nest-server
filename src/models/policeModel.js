@@ -76,5 +76,10 @@ const policeSchema = new mongoose.Schema(
   }
 );
 
+// Add indexes for better search performance
+policeSchema.index({ title: 'text', description: 'text' });
+policeSchema.index({ category: 1 });
+policeSchema.index({ createdAt: -1 });
+
 const PoliceModel = mongoose.model("police", policeSchema);
 export default PoliceModel;

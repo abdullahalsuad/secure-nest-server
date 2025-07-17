@@ -44,27 +44,42 @@ export const getUserApplications = async (req, res) => {
 export const changeStatues = async (req, res) => {
   try {
     const applicationId = req.params.applicationId;
-    const { Status } = req.body;
+    const { Status, rejectionReason } = req.body;
 
+    // Validate status value
     if (!["Pending", "Approved", "Rejected"].includes(Status)) {
       return res.status(400).json({ message: "Invalid status provided" });
     }
 
-    const application = await ApplicationModel.findOneAndUpdate(
-      { _id: applicationId },
-      { $set: { Status } },
+    // Find the application first
+    const application = await ApplicationModel.findById(applicationId);
+    if (!application) {
+      return res.status(404).json({ message: "Application not found" });
+    }
+
+    // Prepare update object
+    const updateData = { Status };
+
+    // If rejected, include rejectionReason
+    if (Status === "Rejected") {
+      updateData.rejectionReason = rejectionReason || "N/A";
+    }
+
+    // Update the application
+    const updatedApplication = await ApplicationModel.findByIdAndUpdate(
+      applicationId,
+      { $set: updateData },
       { new: true }
     );
 
-    // If status is Approved, increment
+    // If approved, update related police data
     if (Status === "Approved") {
-      await policeModel.findByIdAndUpdate(
-        application.policeId, // assumes
-        { $inc: { purchaseCount: 1 } }
-      );
+      await policeModel.findByIdAndUpdate(application.policeId, {
+        $inc: { purchaseCount: 1 },
+      });
     }
 
-    res.status(200).json(application);
+    res.status(200).json(updatedApplication);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
@@ -75,8 +90,6 @@ export const assignAgent = async (req, res) => {
   try {
     const { applicationId } = req.params;
     const { agentEmail, agentName, agentID } = req.body;
-
- 
 
     const updatedApp = await ApplicationModel.findOneAndUpdate(
       { _id: applicationId },
@@ -105,7 +118,6 @@ export const getAssignedApplications = async (req, res) => {
   try {
     const agentID = req.params.userId;
 
-
     const applications = await ApplicationModel.find({
       "assignedAgent.agentID": agentID,
     });
@@ -129,6 +141,7 @@ export const getSingleApplication = async (req, res) => {
   }
 };
 
+// get approved policies
 export const getApprovedPoliciesForUser = async (req, res) => {
   const userId = req.params.userId;
 

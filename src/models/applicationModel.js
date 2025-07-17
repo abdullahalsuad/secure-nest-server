@@ -23,7 +23,10 @@ const applicationSchema = new mongoose.Schema(
       enum: ["Pending", "Approved", "Rejected"],
       default: "Pending",
     },
-
+    rejectionReason: {
+      type: String,
+      default: "N/A",
+    },
     paymentStatues: {
       type: String,
       default: "Due",

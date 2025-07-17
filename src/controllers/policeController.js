@@ -16,14 +16,83 @@ export const addPolice = async (req, res) => {
   }
 };
 
-// get all polices
+// get all polices with filtering, search, and pagination
 export const getAllPolices = async (req, res) => {
   try {
-    const polices = await PoliceModel.find();
+    const { category, search, page = 1, limit = 9 } = req.query;
 
-    res.status(200).json(polices);
-  } catch (err) {
-    res.status(400).json({ messages: err.message });
+    // Build query object
+    let query = {};
+
+    // Category filter
+    if (category && category !== "all") {
+      query.category = category;
+    }
+
+    // Search filter (case-insensitive regex)
+    if (search) {
+      const searchRegex = new RegExp(search.trim(), "i");
+      query.$or = [
+        { title: searchRegex },
+        { description: searchRegex },
+        { category: searchRegex },
+      ];
+    }
+
+    // Calculate pagination
+    const skip = (page - 1) * limit;
+
+    // Execute query with pagination
+    const polices = await PoliceModel.find(query)
+      .sort({ createdAt: -1 }) // Sort by newest first
+      .skip(skip)
+      .limit(parseInt(limit));
+
+    // Get total count for pagination
+    const totalPolicies = await PoliceModel.countDocuments(query);
+
+    // Calculate pagination info
+    const totalPages = Math.ceil(totalPolicies / limit);
+    const hasNextPage = page < totalPages;
+    const hasPrevPage = page > 1;
+
+    res.status(200).json({
+      success: true,
+      data: polices,
+      pagination: {
+        currentPage: parseInt(page),
+        totalPages,
+        totalPolicies,
+        hasNextPage,
+        hasPrevPage,
+        limit: parseInt(limit),
+      },
+    });
+  } catch (error) {
+    console.error("Error fetching policies:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error fetching policies",
+      error: error.message,
+    });
+  }
+};
+
+// Get all available categories
+export const getPolicyCategories = async (req, res) => {
+  try {
+    const categories = await PoliceModel.distinct("category");
+    res.status(200).json({
+      success: true,
+      data: categories,
+    });
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error fetching categories",
+      error: error.message,
+    });
   }
 };
 

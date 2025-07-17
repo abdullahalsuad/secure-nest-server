@@ -11,6 +11,9 @@ router.post("/add-police", verifyAdmin, policeController.addPolice);
 // get all polices
 router.get("/polices", policeController.getAllPolices);
 
+// get policy categories
+router.get("/policies/categories", policeController.getPolicyCategories);
+
 // get a police
 router.get("/polices/:id", policeController.getAPolice);
 

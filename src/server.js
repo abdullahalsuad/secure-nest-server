@@ -14,6 +14,7 @@ import newsletterRoutes from "./routes/newsletterRoutes.js";
 import claimRoutes from "./routes/claimRoutes.js";
 import reviewRoutes from "./routes/reviewRoutes.js";
 
+
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -51,6 +52,8 @@ app.use("/api/v1", claimRoutes);
 
 // review routes
 app.use("/api/v1", reviewRoutes);
+
+
 
 // Basic route
 app.get("/", (req, res) => {
