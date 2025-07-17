@@ -30,7 +30,7 @@ router.patch(
 );
 
 // check the user role
-router.get("/user/:userId", verifyToken, userController.getUserById);
+router.get("/user/:userId", userController.getUserById);
 
 // for admin only
 
