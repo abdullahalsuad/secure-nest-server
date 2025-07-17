@@ -9,7 +9,7 @@ const router = express.Router();
 router.post("/add-police", verifyAdmin, policeController.addPolice);
 
 // Get top 6 most purchased policies
-router.get("/top-police", verifyAdmin, policeController.getTopPolicies);
+router.get("/top-police", policeController.getTopPolicies);
 
 // get all polices
 router.get("/polices", policeController.getAllPolices);

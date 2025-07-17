@@ -88,6 +88,30 @@ export const updateProfile = async (req, res) => {
   }
 };
 
+// Update agent profile controller
+export const updateAgentProfile = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const { experience, specialties } = req.body;
+
+    // Update agent-specific fields
+    const updatedUser = await UserModel.findOneAndUpdate(
+      { userId },
+      { experience, specialties },
+      { new: true }
+    );
+
+    res.status(200).json({
+      message: "Agent profile updated successfully",
+      user: updatedUser,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: err.message,
+    });
+  }
+};
+
 // get all user
 export const getAllUsers = async (req, res) => {
   try {

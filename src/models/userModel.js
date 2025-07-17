@@ -27,6 +27,17 @@ const userSchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
+
+    // agent
+    experience: {
+      type: String,
+      default: "N/A",
+    },
+
+    specialties: {
+      type: String,
+      default: "N/A",
+    },
   },
   {
     timestamps: true,

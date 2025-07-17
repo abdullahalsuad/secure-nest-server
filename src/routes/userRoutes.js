@@ -15,11 +15,18 @@ router.post("/logout", userController.logout);
 // add a user
 router.post("/add-user", userController.addUser);
 
-// add a user
+// update profile
 router.patch(
   "/update-profile/:userId",
   verifyToken,
   userController.updateProfile
+);
+
+// update agent profile
+router.patch(
+  "/update-agent-profile/:userId",
+  verifyToken,
+  userController.updateAgentProfile
 );
 
 // check the user role
