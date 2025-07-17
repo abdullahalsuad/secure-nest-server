@@ -16,6 +16,24 @@ export const addPolice = async (req, res) => {
   }
 };
 
+// Get top 6 most purchased policies
+export const getTopPolicies = async (req, res) => {
+  try {
+    const topPolicies = await PoliceModel.find()
+      .sort({ purchaseCount: -1 })
+      .limit(6);
+
+    res.status(200).json({
+      message: "Top 6 policies fetched successfully",
+      policies: topPolicies,
+    });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "Failed to fetch policies", error: err.message });
+  }
+};
+
 // get all polices with filtering, search, and pagination
 export const getAllPolices = async (req, res) => {
   try {
@@ -75,6 +93,17 @@ export const getAllPolices = async (req, res) => {
       message: "Error fetching policies",
       error: error.message,
     });
+  }
+};
+
+// get all  police for admin
+export const getAllPoliciesForAdmin = async (req, res) => {
+  try {
+    const policies = await PoliceModel.find();
+
+    res.status(200).json(policies);
+  } catch (err) {
+    res.status(400).json({ messages: err.message });
   }
 };
 

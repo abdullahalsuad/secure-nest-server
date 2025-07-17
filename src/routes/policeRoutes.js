@@ -8,8 +8,14 @@ const router = express.Router();
 // create new police
 router.post("/add-police", verifyAdmin, policeController.addPolice);
 
+// Get top 6 most purchased policies
+router.get("/top-police", verifyAdmin, policeController.getTopPolicies);
+
 // get all polices
 router.get("/polices", policeController.getAllPolices);
+
+// get all polices for admin
+router.get("/all-polices", policeController.getAllPoliciesForAdmin);
 
 // get policy categories
 router.get("/policies/categories", policeController.getPolicyCategories);

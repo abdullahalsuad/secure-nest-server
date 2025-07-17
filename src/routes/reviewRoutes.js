@@ -6,4 +6,6 @@ const router = express.Router();
 
 router.post("/reviews", verifyToken, reviewController.submitReview);
 
+router.get("/reviews", reviewController.getReview);
+
 export default router;

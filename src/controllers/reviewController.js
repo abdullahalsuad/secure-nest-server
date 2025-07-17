@@ -10,3 +10,13 @@ export const submitReview = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+export const getReview = async (req, res) => {
+  try {
+    const reviews = await ReviewModel.find();
+
+    res.status(200).json(reviews);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
