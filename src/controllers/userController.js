@@ -9,7 +9,7 @@ export const createJwtToken = (req, res) => {
 
   res.cookie("token", token, {
     httpOnly: true,
-    secure: false, // Set to true in production
+    secure: true, // Set to true in production
   });
 
   res.json({ success: true });
@@ -19,7 +19,7 @@ export const createJwtToken = (req, res) => {
 export const logout = (req, res) => {
   res.clearCookie("token", {
     httpOnly: true,
-    secure: false, // Set to true in production
+    secure: true, // Set to true in production
   });
 
   res.json({ message: "Logged out successfully" });
