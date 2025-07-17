@@ -37,7 +37,7 @@ export const getTopPolicies = async (req, res) => {
 // get all polices with filtering, search, and pagination
 export const getAllPolices = async (req, res) => {
   try {
-    const { category, search, page = 1, limit = 9 } = req.query;
+    const { category, search, page = 1, limit = 6 } = req.query;
 
     // Build query object
     let query = {};
@@ -131,10 +131,6 @@ export const getAPolice = async (req, res) => {
     const { id } = req.params;
 
     const police = await PoliceModel.findById(id);
-
-    if (!police) {
-      return res.status(404).json({ message: "Police record not found" });
-    }
 
     res.status(200).json(police);
   } catch (err) {

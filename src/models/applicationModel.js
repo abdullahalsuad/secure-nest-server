@@ -29,6 +29,7 @@ const applicationSchema = new mongoose.Schema(
     },
     paymentStatues: {
       type: String,
+      enum: ["Paid", "Due"],
       default: "Due",
     },
 

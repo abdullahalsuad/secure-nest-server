@@ -13,6 +13,7 @@ import blogRoutes from "./routes/blogRoutes.js";
 import newsletterRoutes from "./routes/newsletterRoutes.js";
 import claimRoutes from "./routes/claimRoutes.js";
 import reviewRoutes from "./routes/reviewRoutes.js";
+import paymentRoutes from "./routes/paymentRoutes.js";
 
 dotenv.config();
 const app = express();
@@ -51,6 +52,9 @@ app.use("/api/v1", claimRoutes);
 
 // review routes
 app.use("/api/v1", reviewRoutes);
+
+// Routes for payment
+app.use("/api/v1", paymentRoutes);
 
 // Basic route
 app.get("/", (req, res) => {
