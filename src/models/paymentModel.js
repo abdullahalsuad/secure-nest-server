@@ -12,6 +12,11 @@ const paymentSchema = new mongoose.Schema(
       required: true,
     },
 
+    policeName: {
+      type: String,
+      required: true,
+    },
+
     // User Info
     email: {
       type: String,

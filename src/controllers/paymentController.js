@@ -64,3 +64,78 @@ export const getPaymentsHistoryByUserId = async (req, res) => {
     res.status(400).json({ messages: err.message });
   }
 };
+
+// 
+export const getIncomeStats = async (req, res) => {
+  try {
+    const now = new Date();
+
+    // Define time boundaries
+    const startOfToday = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate()
+    );
+    const startOfWeek = new Date(now);
+    startOfWeek.setDate(now.getDate() - now.getDay()); // Sunday
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const startOfYear = new Date(now.getFullYear(), 0, 1);
+
+    // Helper function to get total income from a date
+    const getIncomeSince = async (startDate) => {
+      const result = await PaymentModel.aggregate([
+        {
+          $match: {
+            createdAt: { $gte: startDate },
+          },
+        },
+        {
+          $group: {
+            _id: null,
+            total: { $sum: "$amount" }, // Using correct field
+          },
+        },
+      ]);
+      return result[0]?.total || 0;
+    };
+
+    // Total income (all time)
+    const totalResult = await PaymentModel.aggregate([
+      {
+        $group: {
+          _id: null,
+          total: { $sum: "$amount" },
+        },
+      },
+    ]);
+    const totalIncome = totalResult[0]?.total || 0;
+
+    // Get other period incomes
+    const [dailyIncome, weeklyIncome, monthlyIncome, yearlyIncome] =
+      await Promise.all([
+        getIncomeSince(startOfToday),
+        getIncomeSince(startOfWeek),
+        getIncomeSince(startOfMonth),
+        getIncomeSince(startOfYear),
+      ]);
+
+    res.status(200).json({
+      success: true,
+      data: {
+        totalIncome,
+        dailyIncome,
+        weeklyIncome,
+        monthlyIncome,
+        yearlyIncome,
+      },
+    });
+  } catch (error) {
+    console.error("Error fetching income stats:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch income statistics",
+      error: error.message,
+    });
+  }
+};
+
